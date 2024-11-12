@@ -220,6 +220,9 @@ load_clf = pickle.load(open('rf_pinguinos.pkl', 'rb'))
 encoder = pickle.load(open('encoder_pinguinos.pkl', 'rb'))
 scaler = pickle.load(open('scaler_pinguinos.pkl', 'rb'))
 X_train_prepared = pickle.load(open('X_train_prepared_pinguinos.pkl', 'rb'))
+encoder1 = pickle.load(open('encoder_especies_pinguinos.pkl', 'rb'))
+
+
 
 # Definir función para capturar las características del usuario desde la interfaz de Streamlit
 def user_input_features():
@@ -266,6 +269,8 @@ st.write(input_df)
 # Realizar la predicción con el modelo cargado
 prediction = load_clf.predict(input_df_processed)
 prediction_proba = load_clf.predict_proba(input_df_processed)
+etiquetas = encoder1.inverse_transform(np.arange(len(encoder1.classes_)))
+proba_df = pd.DataFrame(prediction_proba, columns=etiquetas)
 
 # Mostrar resultados de la predicción y la probabilidad
 col1, col2 = st.columns(2)
@@ -295,6 +300,6 @@ with col1:
 
 with col2:
     st.subheader('Probabilidad de predicción')
-    st.write(prediction_proba)
+    st.write(proba_df)
 
 st.markdown("""---""")
